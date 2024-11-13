@@ -1,3 +1,4 @@
+/**Web pages */
 module.exports = {
   group: {
     prefix:'/pages'

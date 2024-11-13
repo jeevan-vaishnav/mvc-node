@@ -1,3 +1,4 @@
+/**Server */
 const express = require("express");
 const Router = require('../router')
 
@@ -15,13 +16,6 @@ class Server {
 
   _setupRoutes() {
     this.router.create(this.app)    
-    // this.app.get("/home", (req, res) => {
-    //   res.send("Home Page");
-    // });
-
-    // this.app.get("/product", (req, res) => {
-    //   res.send("Product page");
-    // });
   }
 
   _listen() {

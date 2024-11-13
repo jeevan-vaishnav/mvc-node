@@ -1,3 +1,4 @@
+/**Router Index*/
 const express = require("express");
 const webRoutes = require("./web");
 
@@ -12,10 +13,18 @@ class Router {
     //TODO attach routes
     this._attachWebRoutes();
     //TODO handle 404 pages
+    this._handlePageNotFound();
     //TODO handle exceptions
     //TODO register router
 
     app.use(this.router);
+  }
+
+  _handlePageNotFound(){
+    this.router.all("*",(req,res)=>{
+      res.sendStatus(404).send('Page not found!')
+      console.log("Page not found!")
+    })    
   }
 
   _attachWebRoutes() {
