@@ -1,23 +1,31 @@
 /**Router Index*/
 const express = require("express");
 const webRoutes = require("./web");
+const apiRoutes = require('./api');
 
 class Router {
   constructor() {
     this.router = express.Router();
     this.webRoutes = webRoutes;
+    this.apiRoutes = apiRoutes;
   }
 
   create(app) {
     //TODO attach middleware
+    this._attachMiddleware();
     //TODO attach routes
     this._attachWebRoutes();
+    this._attachApiRoutes();
     //TODO handle 404 pages
     this._handlePageNotFound();
     //TODO handle exceptions
     //TODO register router
 
     app.use(this.router);
+  }
+
+  _attachMiddleware(){
+    this.router.use(express.json())
   }
 
   _handlePageNotFound(){
@@ -32,7 +40,7 @@ class Router {
   }
 
   _attachApiRoutes() {
-    // this._attachRoutes(this.apiRoutes,'/api')
+    this._attachRoutes(this.apiRoutes,'/api')
   }
 
   _attachRoutes(routeGroups, prefix = "") {
