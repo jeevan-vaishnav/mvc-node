@@ -1,5 +1,7 @@
 const { User} =  require('../../models')
 
+const InvalidCredentialException = require('../../exceptions/invalid-credentials-exceptions')
+
 class AuthController {
   async login(req, res) {
 
@@ -13,15 +15,14 @@ class AuthController {
 
     const user = await User.findOne({where :{email}})
 
-    throw new Error('An error happened');
 
    
     if(!user){
-      return res.status(403).send('Invalid login credentials!')
+      throw new InvalidCredentialException('Invalid credentials');
     }
 
     if(password !== user.password){
-      return res.status(403).send('Invalid login credentials!')
+      throw new InvalidCredentialException('Invalid credentials');
     }
 
 
