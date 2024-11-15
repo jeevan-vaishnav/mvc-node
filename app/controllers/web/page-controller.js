@@ -1,6 +1,5 @@
 class PageController {
   home(req, res) {
-    throw new Error('An error happened');
     res.send("HomePage");
   }
   about(req, res) {

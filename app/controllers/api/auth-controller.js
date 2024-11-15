@@ -3,14 +3,18 @@ const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken')
 const {appKey,tokenExpiresIN} = require('../../../config/app')
 
+const UserRepository = require('../../repositories/user-repository');
+
 const InvalidCredentialException = require('../../exceptions/invalid-credentials-exceptions')
 
 class AuthController {
   async login(req, res) {
     const {email, password } = req.body;
 
-    const user = await User.findOne({where :{email}})
-   
+    // const user = await User.findOne({where :{email}})
+    
+    const user  = await UserRepository.findByEmail(email);
+
     if(!user){
       throw new InvalidCredentialException('Invalid credentials');
     }
