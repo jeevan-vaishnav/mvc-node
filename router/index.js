@@ -19,11 +19,25 @@ class Router {
     //TODO handle 404 pages
     this._handlePageNotFound();
     //TODO handle exceptions
+    this._handleExceptions();
     //TODO register router
 
     app.use(this.router);
   }
 
+
+  _handleExceptions(){
+    this.router.use((err,req,res,next)=>{
+      err.statusCode = err.status || err.statusCode || 500
+      return res.status(err.statusCode).send(err.message);
+    })
+  }
+
+  _catchError(route){
+    return (req,res,next) => {
+      route(req,res,next).catch(next)
+    }
+  }
   _attachMiddleware(){
     this.router.use(express.json())
   }
@@ -47,7 +61,7 @@ class Router {
     routeGroups.forEach(({ group, routes }) => {
       routes.forEach(({ method, path, handler }) => {
         console.log(prefix + group.prefix + path, handler);
-        this.router[method](prefix + group.prefix + path, handler);
+        this.router[method](prefix + group.prefix + path, this._catchError(handler));
       });
     });
   }

@@ -12,6 +12,9 @@ class AuthController {
     const {email, password } = req.body;
 
     const user = await User.findOne({where :{email}})
+
+    throw new Error('An error happened');
+
    
     if(!user){
       return res.status(403).send('Invalid login credentials!')
