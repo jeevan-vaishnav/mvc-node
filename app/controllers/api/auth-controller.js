@@ -25,9 +25,9 @@ class AuthController {
     const payload = {id:user.id,email:user.email,firstName:user.firstName,lastName:user.lastName}
     // const key = require('crypto').randomBytes(64).toString('hex');
     // console.log(key);
-    const accessToken = await AuthServices.generateToken(payload);
+    const tokens = await AuthServices.generateTokens(payload);
 
-    res.send({user,...{accessToken}});
+    res.send({user,...tokens});
   }
 
   async register(req, res) {
