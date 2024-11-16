@@ -12,6 +12,7 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
+      this.hasMany(models.RefreshToken,{foreignKey:"userId"})
     }
   }
   User.init(
