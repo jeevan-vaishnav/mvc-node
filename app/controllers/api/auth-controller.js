@@ -31,7 +31,12 @@ class AuthController {
   }
 
   async register(req, res) {
-    res.send("Register");
+    const {firstName,lastName,email,password} = req.body;
+    const data = {firstName,lastName,email,password}
+    const user = await UserRepository.create(data)
+    const tokens = await AuthServices.generateTokens(data);
+
+    res.send({user,...tokens});
 
   }
 }
