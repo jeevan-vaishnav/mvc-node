@@ -59,9 +59,9 @@ class Router {
 
   _attachRoutes(routeGroups, prefix = "") {
     routeGroups.forEach(({ group, routes }) => {
-      routes.forEach(({ method, path, handler }) => {
-        console.log(prefix + group.prefix + path, handler);
-        this.router[method](prefix + group.prefix + path, this._catchError(handler));
+      routes.forEach(({ method, path,middleware = [] , handler }) => {
+        console.log(prefix + group.prefix + path, middleware = [] ,handler);
+        this.router[method](prefix + group.prefix + path, [...group.middleware || [], ...middleware], this._catchError(handler));
       });
     });
   }
