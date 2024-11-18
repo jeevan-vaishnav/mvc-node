@@ -21,6 +21,4 @@ exports.auth = async(req,res,next) =>{
             return res.status(error.status || 401).send({message:'User not found'})
         }
     })
-
-    console.log(token)
 }

@@ -45,7 +45,6 @@ class Router {
   _handlePageNotFound(){
     this.router.all("*",(req,res)=>{
       res.sendStatus(404).send('Page not found!')
-      console.log("Page not found!")
     })    
   }
 
@@ -60,7 +59,6 @@ class Router {
   _attachRoutes(routeGroups, prefix = "") {
     routeGroups.forEach(({ group, routes }) => {
       routes.forEach(({ method, path,middleware = [] , handler }) => {
-        console.log(prefix + group.prefix + path, middleware = [] ,handler);
         this.router[method](prefix + group.prefix + path, [...group.middleware || [], ...middleware], this._catchError(handler));
       });
     });
