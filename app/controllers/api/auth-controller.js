@@ -44,20 +44,28 @@ class AuthController {
     // const user = await UserRepository.create(data)
     // const tokens = await AuthServices.generateTokens(data);
 
-    const transporter = nodemailer.createTransport({
-      host: mailConfig.smtp.host,
-      port: mailConfig.smtp.port,
-      auth: mailConfig.smtp.auth,
-    });
+    // const transporter = nodemailer.createTransport({
+    //   host: mailConfig.smtp.host,
+    //   port: mailConfig.smtp.port,
+    //   auth: mailConfig.smtp.auth,
+    // });
 
-    const message = {
-      from: mailConfig.from,
-      to: email,
-      subject: "Email verification",
-      html: "<div><h1>Please verify your email</h1>button>Verify email</button></div>",
-    };
+    // const message = {
+    //   from: mailConfig.from,
+    //   to: email,
+    //   subject: "Email verification",
+    //   html: "<div><h1>Please verify your email</h1>button>Verify email</button></div>",
+    // };
 
-    await transporter.sendMail(message);
+    // await transporter.sendMail(message);
+
+    // await Mail.send('email-verification',message =>{
+    //   message
+    //   .from(mailConfig.from)
+    //   .to(email)
+    //   .subject('Email verification')
+    //   .with({firstName,lastName,email})
+    // })
 
     res.send("Works");
     // res.send({user,...tokens});
