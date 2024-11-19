@@ -1,6 +1,7 @@
 /**Server */
 const express = require("express");
 const Router = require('../router')
+const hbs = require('express-handlebars');
 
 class Server {
   constructor(port) {
@@ -10,8 +11,18 @@ class Server {
   }
 
   start() {
+    this._setViewEngine();
     this._listen();
     this._setupRoutes();
+  }
+
+  _setViewEngine(){
+    this.app.engine('hbs', hbs.engine(
+      {extname:'.hbs'}
+    ))
+
+    this.app.set('view engine','hbs')
+
   }
 
   _setupRoutes() {
