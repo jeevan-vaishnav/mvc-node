@@ -4,10 +4,14 @@ class PageController {
     res.render('home')
   }
   async about(req, res) {
-    res.send("AboutPage");
+    // res.send("AboutPage");
+    res.render('about')
+
   }
   async contact(req, res) {
-    res.send("ContactPage");
+    // res.send("ContactPage");
+    res.render('contact')
+
   }
 }
 
