@@ -9,7 +9,6 @@ class Smtp{
 
     }
 
-
     _setCompiler(){
         this.transporter.use('compile',hbs({
             viewEngine:{defaultLayout:false},
