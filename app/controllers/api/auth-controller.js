@@ -8,7 +8,9 @@ const nodemailer = require("nodemailer");
 const mailConfig = require("../../../config/mail");
 
 const InvalidCredentialException = require("../../exceptions/invalid-credentials-exceptions");
-const mail = require("../../../config/mail");
+// const mail = require("../../../config/mail");
+
+const Mailer = require("../../modules/mailer");
 
 class AuthController {
   async login(req, res) {
@@ -59,13 +61,13 @@ class AuthController {
 
     // await transporter.sendMail(message);
 
-    // await Mail.send('email-verification',message =>{
-    //   message
-    //   .from(mailConfig.from)
-    //   .to(email)
-    //   .subject('Email verification')
-    //   .with({firstName,lastName,email})
-    // })
+    await Mailer.send("email-verification", (message) => {
+      message
+        .from(mailConfig.from)
+        .to(email)
+        .subject("Email verification")
+        .with({ firstName, lastName, email });
+    });
 
     res.send("Works");
     // res.send({user,...tokens});
