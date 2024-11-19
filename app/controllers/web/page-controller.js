@@ -1,11 +1,12 @@
 class PageController {
-  home(req, res) {
-    res.send("HomePage");
+  async home(req, res) {
+    // res.send("HomePage");
+    res.render('home')
   }
-  about(req, res) {
+  async about(req, res) {
     res.send("AboutPage");
   }
-  contact(req, res) {
+  async contact(req, res) {
     res.send("ContactPage");
   }
 }
