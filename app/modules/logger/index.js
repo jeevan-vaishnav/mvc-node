@@ -41,9 +41,8 @@ logger.getLogByDate = async date =>{
   const file = await readFile(dest,'utf8');
   const logs = file.split('\n');
   const parsedLogs = []
-
   const logLevels = {}
-
+  
   for(const log of logs ){
     try {
       const parseLog = JSON.parse(log)
