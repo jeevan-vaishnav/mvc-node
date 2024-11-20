@@ -2,6 +2,7 @@
 const express = require("express");
 const Router = require('../router')
 const hbs = require('express-handlebars');
+const Scheduler = require('../app/scheduler')
 
 class Server {
   constructor(port) {
@@ -12,8 +13,14 @@ class Server {
 
   start() {
     this._setViewEngine();
-    this._listen();
     this._setupRoutes();
+    this._startScheduler();
+    this._listen();
+  }
+
+  _startScheduler(){
+    Scheduler.runTasks();
+
   }
 
   _setViewEngine(){
