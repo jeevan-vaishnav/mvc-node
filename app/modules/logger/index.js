@@ -27,7 +27,6 @@ const logger = winston.createLogger({
   transports: [transport],
 });
 
-
 logger.getLogDates = async () =>{
   const dest = path.join(__dirname,"../../../logs")
   const files = await readdir(dest,{withFileTypes:true});

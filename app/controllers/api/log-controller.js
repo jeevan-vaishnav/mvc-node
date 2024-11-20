@@ -10,5 +10,4 @@ class LogController {
     }
 }
 
-
 module.exports = new LogController()
