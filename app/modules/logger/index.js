@@ -37,7 +37,34 @@ logger.getLogDates = async () =>{
 }
 
 logger.getLogByDate = async date =>{
-  return {}
+  const dest = path.join(__dirname,`../../../logs/winston.log.${date}`);
+  const file = await readFile(dest,'utf8');
+  const logs = file.split('\n');
+  const parsedLogs = []
+
+  const logLevels = {}
+
+  for(const log of logs ){
+    try {
+      const parseLog = JSON.parse(log)
+      if(logLevels.hasOwnProperty(parseLog.level)){
+        logLevels[parseLog.level]++
+      }else{
+        logLevels[parseLog.level] = 1
+      }
+      parsedLogs.push(parseLog)
+    } catch (error) {
+
+    }
+  }
+
+  return {
+    date:date,
+    total:parsedLogs.length,
+    logLevel:logLevels,
+    logs:parsedLogs,
+
+  }
 }
 
 module.exports = logger;
