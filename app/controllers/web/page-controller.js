@@ -1,6 +1,9 @@
+const logger =require('../../modules/logger')
+
 class PageController {
   async home(req, res) {
     // res.send("HomePage");
+    logger.info('Info Message')
     res.render('home')
   }
   async about(req, res) {
