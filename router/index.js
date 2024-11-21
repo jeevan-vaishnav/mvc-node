@@ -1,8 +1,8 @@
 /**Router Index*/
 const express = require("express");
 const webRoutes = require("./web");
-const apiRoutes = require('./api');
-const logger = require('../app/modules/logger')
+const apiRoutes = require("./api");
+const logger = require("../app/modules/logger");
 class Router {
   constructor() {
     this.router = express.Router();
@@ -25,30 +25,55 @@ class Router {
     app.use(this.router);
   }
 
+  _handleExceptions() {
+    this.router.use((err, req, res, next) => {
+      err.statusCode = err.status || err.statusCode || 500;
+      logger.error(err.message); // implemented logger
 
-  _handleExceptions(){
-    this.router.use((err,req,res,next)=>{
-      err.statusCode = err.status || err.statusCode || 500
+      const expectJSON = /application\/json/.test(req.get("accept"));
 
-      logger.error(err.message) // implemented logger
+      if (expectJSON) {
+        return res.status(err.statusCode).send({
+          message: err.message,
+          status: err.statusCode,
+        });
+      }
 
-      return res.status(err.statusCode).send(err.message);
-    })
+      let page = "";
+      
+      switch (err.statusCode) {
+        case 404:
+          page = 404;
+          break;
+        case 422:
+          page = 400;
+          break;
+        case 403:
+          page = 400;
+          break;
+        case 401:
+          page = 400;
+          break;
+        default:
+          page = 500;
+      }
+      res.render(`errors/${page}-page `, {message:err.message})
+    });
   }
 
-  _catchError(route){
-    return (req,res,next) => {
-      route(req,res,next).catch(next)
-    }
+  _catchError(route) {
+    return (req, res, next) => {
+      route(req, res, next).catch(next);
+    };
   }
-  _attachMiddleware(){
-    this.router.use(express.json())
+  _attachMiddleware() {
+    this.router.use(express.json());
   }
 
-  _handlePageNotFound(){
-    this.router.all("*",(req,res)=>{
-      res.sendStatus(404).send('Page not found!')
-    })    
+  _handlePageNotFound() {
+    this.router.all("*", (req, res) => {
+      res.sendStatus(404).send("Page not found!");
+    });
   }
 
   _attachWebRoutes() {
@@ -56,13 +81,17 @@ class Router {
   }
 
   _attachApiRoutes() {
-    this._attachRoutes(this.apiRoutes,'/api')
+    this._attachRoutes(this.apiRoutes, "/api");
   }
 
   _attachRoutes(routeGroups, prefix = "") {
     routeGroups.forEach(({ group, routes }) => {
-      routes.forEach(({ method, path,middleware = [] , handler }) => {
-        this.router[method](prefix + group.prefix + path, [...group.middleware || [], ...middleware], this._catchError(handler));
+      routes.forEach(({ method, path, middleware = [], handler }) => {
+        this.router[method](
+          prefix + group.prefix + path,
+          [...(group.middleware || []), ...middleware],
+          this._catchError(handler)
+        );
       });
     });
   }
