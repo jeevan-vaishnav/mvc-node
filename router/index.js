@@ -3,6 +3,10 @@ const express = require("express");
 const webRoutes = require("./web");
 const apiRoutes = require("./api");
 const logger = require("../app/modules/logger");
+
+const appConfig = require('../config/app')
+const BaseException = require('../app/exceptions/base-exceptions')
+
 class Router {
   constructor() {
     this.router = express.Router();
@@ -32,6 +36,19 @@ class Router {
 
       const expectJSON = /application\/json/.test(req.get("accept"));
 
+      if(appConfig.appEnv === 'production' && !(err  instanceof BaseException)){
+
+        if(expectJSON){
+          return res.status(err.statusCode).send(
+            errorResponse(err.statusCode,"Something went wrong")
+          );  
+        }
+          
+        const page = getErrorPage(err.statusCode)
+
+       return res.render(`errors/${page}-page`, {message:'Something went wrong!'})
+      }
+
       if (expectJSON) {
         return res.status(err.statusCode).send({
           message: err.message,
@@ -39,25 +56,8 @@ class Router {
         });
       }
 
-      let page = "";
-      
-      switch (err.statusCode) {
-        case 404:
-          page = 404;
-          break;
-        case 422:
-          page = 400;
-          break;
-        case 403:
-          page = 400;
-          break;
-        case 401:
-          page = 400;
-          break;
-        default:
-          page = 500;
-      }
-      res.render(`errors/${page}-page `, {message:err.message})
+      const page = getErrorPage(err.statusCode)
+      return res.render(`errors/${page}-page`, {message:err.message})
     });
   }
 
@@ -97,4 +97,32 @@ class Router {
   }
 }
 
+const errorResponse = (status,message) => {
+  return {
+    message,
+    status
+  }
+}
+
+const getErrorPage = status => {
+  let page =''
+
+  switch(status){
+    case 404:
+      page = 404;
+      break;
+    case 422:
+      page = 400;
+      break;
+    case 403:
+      page = 400;
+      break;
+    case 401:
+      page = 400;
+      break;
+    default:
+      page = 500;
+  }
+  return page;
+}
 module.exports = new Router();
