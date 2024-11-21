@@ -10,13 +10,13 @@ module.exports = {
       method: "post",
       path: "/login",
       middleware:[authRules.login,validate],
-      handler: AuthController.login,
+      handler: AuthController.login.bind(AuthController),
     },
     {
       method: "post",
       path: "/register",
       middleware:[authRules.register,validate],
-      handler: AuthController.register,
+      handler: AuthController.register.bind(AuthController),
     },
   ],
 };

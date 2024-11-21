@@ -36,15 +36,15 @@ class AuthController {
     // const key = require('crypto').randomBytes(64).toString('hex');
     // console.log(key);
     const tokens = await AuthServices.generateTokens(payload);
-
-    res.send({ user, ...tokens });
+    console.log("THIS:", this)
+    res.send(this._parsedResponse(user,tokens));
   }
 
   async register(req, res) {
     const { firstName, lastName, email, password } = req.body;
-    // const data = {firstName,lastName,email,password}
-    // const user = await UserRepository.create(data)
-    // const tokens = await AuthServices.generateTokens(data);
+    const data = {firstName,lastName,email,password}
+    const user = await UserRepository.create(data)
+    const tokens = await AuthServices.generateTokens(data);
 
     // const transporter = nodemailer.createTransport({
     //   host: mailConfig.smtp.host,
@@ -69,8 +69,31 @@ class AuthController {
         .with({ firstName, lastName, email });
     });
 
-    res.send("Works");
-    // res.send({user,...tokens});
+    res.send(this._parsedResponse(user,tokens));
+  }
+
+  _parsedResponse(user,tokens){
+    return {
+      user:{
+        id:user.id,
+        email:user.email,
+        firstName:user.firstName,
+        lastName:user.lastName
+      },
+      ...tokens
+    }
+  }
+}
+
+const parsedResponse = (user,tokens)=>{
+  return {
+    user:{
+      id:user.id,
+      email:user.email,
+      firstName:user.firstName,
+      lastName:user.lastName
+    },
+    ...tokens
   }
 }
 
